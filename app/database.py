@@ -1,3 +1,12 @@
+import sqlite3
+import configparser
+from app.models import Movie
+def get_connection():
+    config = configparser.ConfigParser()
+    config.read("settings.ini")
+
+    db_path = config["database"]["path"]
+    return sqlite3.connect(db_path)
 def initialize_database():
     import sqlite3
     import os
@@ -25,3 +34,67 @@ def initialize_database():
 
     conn.commit()
     conn.close()
+
+
+def movie_exists(title, year):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+    "SELECT 1 FROM movies WHERE title = ? AND year = ?", (title, year)
+    )
+    exists = cursor.fetchone() is not None
+    conn.close()
+    return exists
+    
+def add_movie(title, year, genre_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+    """
+    INSERT INTO movies (title, year, genre_id)
+    VALUES (?, ?, ?)
+    """, (title, year, genre_id)
+    )
+    conn.commit()
+    conn.close()
+    
+def update_movie(movie_id, title, year, genre_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+    """
+        UPDATE movies
+        SET title = ?, year = ?, genre_id = ?
+        WHERE id = ?
+    """,
+    (title, year, genre_id, movie_id)
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_all_movies():
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        SELECT id, title, year, genre_id
+        FROM movies
+        ORDER BY title
+        """
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    movies = []
+    for row in rows:
+        movie = Movie(id=row[0],
+            title=row[1],
+            year=row[2],
+            genre_id=row[3]
+        )
+        movies.append(movie)
+    return movies
