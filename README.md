@@ -1,4 +1,4 @@
-# PythonAssignment
+### PythonAssignment
 
 My python Assignment is a simple movie tracker.
 
@@ -14,7 +14,7 @@ Store data in a local SQLite database
 
 
 
-Setup instructions
+### Setup instructions
 
 1. clone the repository
 
@@ -48,7 +48,7 @@ python -m app.main
 
 
 
-Database
+### Database
 
 the database file is defined in settings.ini
 
