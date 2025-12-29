@@ -6,20 +6,20 @@ def export_movies_to_csv(movies,genre_map, filename="movies.csv"):
         data.append({
         "ID": movie.id,
         "Title": movie.title,
-        "Year": movie.year;
+        "Year": movie.year,
         "Genre": genre_map.get(movie.genre_id, "Unknown")
         })
     df = pd.DataFrame(data)
     df.to_csv(filename, index=False)
 
-def export_movies_to_excel(movies, filename="movies.xlsx"):
+def export_movies_to_excel(movies, genre_map, filename="movies.xlsx"):
     
     data = []
     for movie in movies:
         data.append({
         "ID": movie.id,
         "Title": movie.title,
-        "Year": movie.year;
+        "Year": movie.year,
         "Genre": genre_map.get(movie.genre_id, "Unknown")
         })
     df = pd.DataFrame(data)

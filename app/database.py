@@ -31,7 +31,7 @@ def initialize_database():
     """)
     
     cursor.execute("SELECT COUNT(*) FROM genres")
-    count = cursor.fetchone()[]
+    count = cursor.fetchone()[0]
     
     if count == 0:
         default_genres = [

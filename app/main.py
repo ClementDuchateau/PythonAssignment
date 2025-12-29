@@ -15,7 +15,7 @@ def add_movie_cli():
     print("Movie added succesfully")
 
 def add_genre_cli():
-    genre = input("Genre name: ")
+    name = input("Genre name: ")
     
     if genre_exists(name):
         print("This genre already exists in the database")
@@ -43,7 +43,7 @@ def list_movies_cli():
         return
 
     for movie in movies:
-        genre_name = genre_map(movie.genre_id, "Unknown")
+        genre_name = genre_map.get(movie.genre_id, "Unknown")
         print(f"{movie.id}: {movie.title} ({movie.year}) [{genre_name}]")
     print()
 
@@ -71,12 +71,15 @@ def export_report_cli():
     print("2. Export to Excel")
 
     choice = input("Choose format: ")
+    
+#    for movie in movies:
+#        movie.genre_name = genre_map.get(movie.genre_id, "Unknown")
 
     if choice == "1":
-        export_movies_to_csv(movies)
+        export_movies_to_csv(movies, genre_map)
         print("Exported movies to movies.csv\n")
     elif choice == "2":
-        export_movies_to_excel(movies)
+        export_movies_to_excel(movies, genre_map)
         print("Exported movies to movies.xlsx\n")
     else:
         print("Invalid choice.\n")
@@ -88,21 +91,28 @@ def main():
     
     while True:
         print("1. Add movie")
-        print("2. List movies")
-        print("3. Edit movie")
-        print("4. Export report")
-        print("5. Exit")
+        print("2. Add genre")
+        print("3. List movies")
+        print("4. List genres")
+        print("5. Edit movie")
+        print("6. Export report")
+        print("7. Exit")
         choice = input("Choose an option: ")
         if choice == "1":
             add_movie_cli()
         elif choice == "2":
-            list_movies_cli()
+            add_genre_cli()
         elif choice == "3":
-            edit_movie_cli()
+            list_movies_cli()
         elif choice == "4":
-            export_report_cli()
+            list_genres_cli()
         elif choice == "5":
+            edit_movie_cli()
+        elif choice == "6":
+            export_report_cli()
+        elif choice == "7":
             break
+            
         else:
             print("Not a valid answer try again")
             continue
