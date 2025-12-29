@@ -1,4 +1,4 @@
-from app.database import (add_movie, initialize_database, update_movie, get_all_movies, movie_exists)
+from app.database import (add_movie, initialize_database, update_movie, get_all_movies, movie_exists, genre_exists, add_genre, get_all_genres)
 from app.reports import export_movies_to_csv, export_movies_to_excel
 
 
@@ -14,6 +14,15 @@ def add_movie_cli():
     add_movie(title, year, genre_id)
     print("Movie added succesfully")
 
+def add_genre_cli():
+    genre = input("Genre name: ")
+    
+    if genre_exists(name):
+        print("This genre already exists in the database")
+        return
+    add_genre(name)
+    print("Genre added succesfully")
+
 def edit_movie_cli():
     movie_id = input("Movie ID to edit: ")
     title = input("New title: ")
@@ -25,17 +34,34 @@ def edit_movie_cli():
 
 def list_movies_cli():
     movies = get_all_movies()
+    genres = get_all_genres()
+    
+    genre_map = {g.id: g.name for g in genres}
 
     if not movies:
         print("No movies found.\n")
         return
 
     for movie in movies:
-        print(movie)
+        genre_name = genre_map(movie.genre_id, "Unknown")
+        print(f"{movie.id}: {movie.title} ({movie.year}) [{genre_name}]")
+    print()
+
+def list_genres_cli():
+    genres = get_all_genres()
+
+    if not genres:
+        print("No genres found.\n")
+        return
+
+    for genre in genres:
+        print(genre)
     print()
     
 def export_report_cli():
     movies = get_all_movies()
+    genres = get_all_genres()
+    genre_map = {g.id: g.name for g in genres}
 
     if not movies:
         print("No movies to export.\n")
@@ -54,6 +80,7 @@ def export_report_cli():
         print("Exported movies to movies.xlsx\n")
     else:
         print("Invalid choice.\n")
+        return
 
     
 def main():
